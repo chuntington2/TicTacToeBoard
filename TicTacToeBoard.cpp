@@ -19,7 +19,13 @@ TicTacToeBoard::TicTacToeBoard()
 **/
 Piece TicTacToeBoard::toggleTurn()
 {
-  return Invalid;
+  if (turn == X) {
+    turn = O;
+    return O;
+  } else {
+    turn = X;
+    return X;
+  }
 }
 
 /**
@@ -33,16 +39,40 @@ Piece TicTacToeBoard::toggleTurn()
 **/ 
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
+  if(getWinner() == Invalid) {
+    if(getPiece(row,column) != Invalid) {
+      if(getPiece(row,column) != Blank) {
+        return getPiece(row,column);
+      } else {
+        board[row][column] = turn;
+        Piece placedPiece = turn;
+        turn = toggleTurn();
+        return placedPiece;
+      }
+    }
+    else {
+      return Invalid;
+    }
+  }
   return Invalid;
 }
-
 /**
  * Returns what piece is at the provided coordinates, or Blank if there
  * are no pieces there, or Invalid if the coordinates are out of bounds
 **/
 Piece TicTacToeBoard::getPiece(int row, int column)
 {
-  return Invalid;
+  if((row < BOARDSIZE && row >= 0) && (column <= BOARDSIZE && column >= 0)) {
+    if(board[row][column] == Blank) {
+      return Blank;
+    } else if (board[row][column] == O){
+      return O;
+    } else {
+      return X; 
+    }
+  } else {
+    return Invalid;
+  }
 }
 
 /**
@@ -51,5 +81,96 @@ Piece TicTacToeBoard::getPiece(int row, int column)
 **/
 Piece TicTacToeBoard::getWinner()
 {
-  return Invalid;
+  Piece winner = Invalid;
+  bool same = false; //row
+  for (int i = 0; i < BOARDSIZE; i++) {
+    for(int j = 0; j < BOARDSIZE - 1; j++) {
+      if(j == 0) {
+        if (getPiece(i, j) == getPiece(i, j+1)) {
+          same = true;
+          if (getPiece(i,j) == Blank) {
+            same = false;
+          }
+        }
+      }
+      else {
+        same = same && (getPiece(i, j) == getPiece(i, j+1));
+      }
+    }
+    if (same) {
+      winner = getPiece(0, i);
+    }
+  }
+  
+  same = false; //column
+  for (int i = 0; i < BOARDSIZE; i++) {
+    for(int j = 0; j < BOARDSIZE - 1; j++) {
+      if(j == 0) {
+        if (getPiece(j, i) == getPiece(j+1, i)) {
+          same = true;
+          if (getPiece(j,i) == Blank) {
+            same = false;
+          }
+        }
+      }
+      else {
+        same = same && (getPiece(j, i) == getPiece(j+1, i));
+      }
+    }
+    if (same) {
+      winner = getPiece(i, 0);
+    }
+  }
+  
+  same = false; //diagonal top down
+  for(int i = 0; i < BOARDSIZE - 1; i++) {
+    if (i == 0) {
+      if (getPiece(i, i) == getPiece(i+1, i+1)) {
+        same = true;
+        if (getPiece(i, i) == Blank) {
+          same = false;
+        }
+      }
+    }
+    else {
+      same = same && (getPiece(i, i) == getPiece(i+1, i+1));
+    }
+  }
+   if (same) {
+    winner = getPiece(0, 0);
+  }
+  
+  same = false; //diagonal bottom up
+  for(int i = 0; i < BOARDSIZE - 1; i++) {
+    if (i == 0) {
+      if (getPiece((BOARDSIZE-1) - i, i) == getPiece((BOARDSIZE-1) - i-1, i+1)) {
+        same = true;
+        if (getPiece((BOARDSIZE-1) - i, i) == Blank) {
+          same = false;
+        }
+      }
+    }
+    else {
+      same = same && (getPiece((BOARDSIZE-1) - i, i) == getPiece((BOARDSIZE-1) - i-1, i+1));
+    }
+  }
+   if (same) {
+    winner = getPiece(0, BOARDSIZE - 1);
+  }
+
+  
+  if (winner == Invalid) {
+    bool tie = true;
+    for(int i = 0; i < BOARDSIZE; i++) {
+      for(int j = 0; j < BOARDSIZE; j++) {
+        if (getPiece(i, j) == Blank) {
+          tie = false;
+        }
+      }
+    }
+    if(tie) {
+      return Blank;
+    }
+  }
+  return winner;
 }
