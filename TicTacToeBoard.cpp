@@ -60,6 +60,10 @@ Piece TicTacToeBoard::placePiece(int row, int column)
  * Returns what piece is at the provided coordinates, or Blank if there
  * are no pieces there, or Invalid if the coordinates are out of bounds
 **/
+/* 
+	BUG: When the column for getpiece is equal to the size of the board, it should return invalid.
+	ACTUAL: Accepts it if the column is equal to the boardsize and gets a piece out of bounds
+	*/
 Piece TicTacToeBoard::getPiece(int row, int column)
 {
   if((row < BOARDSIZE && row >= 0) && (column <= BOARDSIZE && column >= 0)) {
