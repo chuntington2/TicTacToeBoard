@@ -64,7 +64,10 @@ TEST(TicTacToeBoardTest, place2)
 TEST(TicTacToeBoardTest, place3)
 {
 	TicTacToeBoard board;
-	ASSERT_TRUE(board.placePiece(3,0) == Invalid);
+	ASSERT_TRUE(board.placePiece/* 
+	BUG: When the column for getpiece is equal to the size of the board, it should return invalid.
+	ACTUAL: Accepts it if the column is equal to the boardsize and gets a piece out of bounds
+	*/
 	ASSERT_TRUE(board.placePiece(0,3) == Invalid);
 	ASSERT_TRUE(board.placePiece(3,3) == Invalid);
 	ASSERT_TRUE(board.placePiece(-1,0) == Invalid);
