@@ -68,7 +68,7 @@ ACTUAL: Accepts it if the column is equal to the boardsize and gets a piece out 
 
 Piece TicTacToeBoard::getPiece(int row, int column)
 {
-  if((row < BOARDSIZE && row >= 0) && (column <= BOARDSIZE && column >= 0)) {
+  if((row < BOARDSIZE && row >= 0) && (column < BOARDSIZE && column >= 0)) {
     if(board[row][column] == Blank) {
       return Blank;
     } else if (board[row][column] == O){
